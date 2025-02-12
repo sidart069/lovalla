@@ -1,5 +1,5 @@
 # lovalla
-# Smart Social Matching
+## Smart Social Matching
 
 Smart Social Matching is an MVP designed to enrich social connections by leveraging advanced matching algorithms and group-based interactions. The project aims to provide a platform where users are grouped into "Villas" based on deep personality insights and behavioral compatibility.
 
