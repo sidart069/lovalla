@@ -14,24 +14,40 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
+const socket_io_1 = require("socket.io");
 let ChatGateway = class ChatGateway {
     afterInit(server) {
         this.server = server;
         console.log('Socket.io server initialized');
     }
-    handleMessage(message) {
-        console.log('Received message:', message);
-        this.server.emit('receiveMessage', message);
+    handleJoinRoom(room, client) {
+        client.join(room);
+        console.log(`Client ${client.id} joined room ${room}`);
+        client.emit('receiveMessage', `You have joined room ${room}`);
+    }
+    handleRoomMessage(data, client) {
+        const { room, message } = data;
+        console.log(`Message from ${client.id} in room ${room}: ${message}`);
+        this.server.to(room).emit('receiveRoomMessage', message);
     }
 };
 exports.ChatGateway = ChatGateway;
 __decorate([
-    (0, websockets_1.SubscribeMessage)('sendMessage'),
+    (0, websockets_1.SubscribeMessage)('joinRoom'),
     __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, socket_io_1.Socket]),
     __metadata("design:returntype", void 0)
-], ChatGateway.prototype, "handleMessage", null);
+], ChatGateway.prototype, "handleJoinRoom", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('sendRoomMessage'),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:returntype", void 0)
+], ChatGateway.prototype, "handleRoomMessage", null);
 exports.ChatGateway = ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: { origin: '*' } })
 ], ChatGateway);
