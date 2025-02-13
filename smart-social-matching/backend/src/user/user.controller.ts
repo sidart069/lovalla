@@ -1,16 +1,17 @@
+// src/user/user.controller.ts
 
-// This controller defines an endpoint at /user that, 
-// when accessed via a GET request, will return the list of users. 
-
-import { Controller, Get } from '@nestjs/common';
-import { UserService } from './user.service';
+import { Controller, Get, UseGuards, Request } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  // ... existing endpoints
 
-  @Get()
-  getAllUsers(): string[] {
-    return this.userService.getUsers();
+  // Protected endpoint to get current user profile
+  @UseGuards(AuthGuard('jwt'))
+  @Get('profile')
+  getProfile(@Request() req: any) {
+    // The JwtStrategy's validate() method attaches the user object to req.user.
+    return req.user;
   }
 }

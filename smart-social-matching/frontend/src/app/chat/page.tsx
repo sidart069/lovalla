@@ -9,10 +9,7 @@ const ChatPage = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    // Initialize the socket connection and store it in state
-    const newSocket = io('http://localhost:3000', {
-      // Optionally, you can add configuration options here.
-    });
+    const newSocket = io('http://localhost:3000');
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
@@ -24,7 +21,6 @@ const ChatPage = () => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
-    // Clean up the connection on component unmount
     return () => {
       newSocket.disconnect();
     };
@@ -35,39 +31,32 @@ const ChatPage = () => {
       console.log('Sending message:', message);
       socket.emit('sendMessage', message);
       setMessage('');
-    } else if (!socket) {
-      console.warn('Socket not initialized yet.');
     }
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
-      <h1>Chat</h1>
-      <div
-        style={{
-          marginBottom: '1rem',
-          border: '1px solid #ccc',
-          padding: '1rem',
-          height: '300px',
-          overflowY: 'auto',
-        }}
-      >
+    <div className="max-w-2xl mx-auto p-8">
+      <h1 className="text-3xl font-bold text-center mb-6">Chat</h1>
+      <div className="mb-6 border border-gray-300 p-4 h-80 overflow-y-auto rounded-md shadow-sm">
         {messages.map((msg, index) => (
-          <p key={index} style={{ margin: '0.5rem 0' }}>
-            {msg}
-          </p>
+          <p key={index} className="my-1 text-gray-800">{msg}</p>
         ))}
       </div>
-      <input
-        type="text"
-        placeholder="Type your message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        style={{ padding: '0.5rem', width: '80%', marginRight: '0.5rem' }}
-      />
-      <button onClick={sendMessage} style={{ padding: '0.5rem 1rem' }}>
-        Send
-      </button>
+      <div className="flex gap-4">
+        <input
+          type="text"
+          placeholder="Type your message..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onClick={sendMessage}
+          className="px-4 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Send
+        </button>
+      </div>
     </div>
   );
 };

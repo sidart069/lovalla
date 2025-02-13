@@ -8,27 +8,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
-const user_service_1 = require("./user.service");
+const passport_1 = require("@nestjs/passport");
 let UserController = class UserController {
-    constructor(userService) {
-        this.userService = userService;
-    }
-    getAllUsers() {
-        return this.userService.getUsers();
+    getProfile(req) {
+        return req.user;
     }
 };
 exports.UserController = UserController;
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.Get)('profile'),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Array)
-], UserController.prototype, "getAllUsers", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserController.prototype, "getProfile", null);
 exports.UserController = UserController = __decorate([
-    (0, common_1.Controller)('user'),
-    __metadata("design:paramtypes", [user_service_1.UserService])
+    (0, common_1.Controller)('user')
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

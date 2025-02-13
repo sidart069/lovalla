@@ -10,13 +10,16 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const user_module_1 = require("./user/user.module");
 const group_module_1 = require("./group/group.module");
+const auth_module_1 = require("./auth/auth.module");
 const chat_gateway_1 = require("./chat/chat.gateway");
+const assessment_module_1 = require("./assessment/assessment.module");
+const matching_module_1 = require("./matching/matching.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_module_1.UserModule, group_module_1.GroupModule],
+        imports: [user_module_1.UserModule, group_module_1.GroupModule, auth_module_1.AuthModule, assessment_module_1.AssessmentModule, matching_module_1.MatchingModule],
         providers: [chat_gateway_1.ChatGateway],
     })
 ], AppModule);
